@@ -1,0 +1,403 @@
+/* Workshop order detail -------------------------------------------------- */
+
+.detail__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.detail__numbers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0);
+}
+
+.detail__order-number {
+  font-family: var(--font-mono);
+  font-size: var(--size-lg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.detail__plate {
+  font-family: var(--font-mono);
+  color: var(--color-fgMuted);
+  font-variant-numeric: tabular-nums;
+}
+
+.detail__meta {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+.detail__meta dt {
+  font-size: var(--size-xs);
+  font-weight: 600;
+  color: var(--color-fgMuted);
+}
+
+.detail__meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.num-units {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Status badge ------------------------------------------------------------ */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+
+.status-badge--requested {
+  background: var(--color-statusAngfragtBg);
+  color: var(--color-statusAngfragtFg);
+}
+
+.status-badge--confirmed {
+  background: var(--color-statusBestaetigtBg);
+  color: var(--color-statusBestaetigtFg);
+}
+
+.status-badge--in_progress {
+  background: var(--color-statusInArbeitBg);
+  color: var(--color-statusInArbeitFg);
+}
+
+.status-badge--done {
+  background: var(--color-statusFertigBg);
+  color: var(--color-statusFertigFg);
+}
+
+.status-badge--picked_up {
+  background: var(--color-statusAbgeholtBg);
+  color: var(--color-statusAbgeholtFg);
+}
+
+/* Timeline ---------------------------------------------------------------- */
+
+.timeline {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__item {
+  position: relative;
+  padding: 0 0 var(--space-3) var(--space-4);
+  border-left: 1px solid var(--color-border);
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+.timeline__time {
+  display: block;
+  margin-top: var(--space-0);
+  color: var(--color-fgMuted);
+  font-size: var(--size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Positions --------------------------------------------------------------- */
+
+.positions-table {
+  width: 100%;
+  margin-top: var(--space-3);
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.positions-table th {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-fgMuted);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  text-align: left;
+}
+
+.positions-table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--size-sm);
+}
+
+.positions-table .num {
+  text-align: right;
+}
+
+/* Action bar -------------------------------------------------------------- */
+
+.detail-action-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Segmented control ------------------------------------------------------- */
+
+.segmented {
+  display: flex;
+  gap: var(--space-0);
+  padding: var(--space-0);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surfaceMuted);
+  margin-bottom: var(--space-3);
+}
+
+.segmented__tab {
+  flex: 1 1 0;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-fgMuted);
+  font-family: inherit;
+  font-size: var(--size-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmented__tab--active {
+  background: var(--color-surface);
+  color: var(--color-accent);
+  box-shadow: 0 1px 2px rgba(18, 48, 60, 0.06);
+}
+
+/* Price input ------------------------------------------------------------- */
+
+.price-input {
+  position: relative;
+  display: block;
+}
+
+.price-input__control {
+  padding-right: 36px;
+}
+
+.price-input__suffix {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-fgMuted);
+  pointer-events: none;
+}
+
+.position-form__submit {
+  width: 100%;
+}
+
+/* Skeleton ---------------------------------------------------------------- */
+
+.detail-skeleton {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.skeleton {
+  display: block;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surfaceMuted);
+  animation: detail-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes detail-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Empty state ------------------------------------------------------------- */
+
+.empty-state {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.empty-state__title {
+  font-size: var(--size-md);
+  font-weight: 600;
+}
+
+.empty-state__text {
+  margin-top: var(--space-1);
+  color: var(--color-fgMuted);
+  font-size: var(--size-sm);
+}
+
+/* Modal ------------------------------------------------------------------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background: var(--color-overlay);
+}
+
+.modal {
+  width: 100%;
+  max-width: 560px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 8px 24px rgba(18, 48, 60, 0.16);
+}
+
+.modal__title {
+  font-size: var(--size-lg);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.modal__text {
+  margin-top: var(--space-2);
+  color: var(--color-fgMuted);
+  font-size: var(--size-sm);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* Helpers ----------------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive -------------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+  .detail__meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .detail-action-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    background: var(--color-bg);
+    padding: var(--space-2) 0 calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--color-border);
+  }
+
+  .detail-action-bar__button {
+    width: 100%;
+  }
+
+  .positions-table,
+  .positions-table tbody,
+  .positions-table tr,
+  .positions-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .positions-table thead {
+    display: none;
+  }
+
+  .positions-table tr {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .positions-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-0) 0;
+    border-bottom: none;
+  }
+
+  .positions-table td::before {
+    content: attr(data-label);
+    color: var(--color-fgMuted);
+    font-size: var(--size-xs);
+    font-weight: 600;
+  }
+
+  .positions-table .num {
+    text-align: right;
+  }
+}
+
+@media (max-width: 479px) {
+  .modal__actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal__actions .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
