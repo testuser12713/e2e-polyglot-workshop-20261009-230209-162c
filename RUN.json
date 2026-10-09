@@ -17,14 +17,87 @@
       "stack": "python",
       "kind": "worker",
       "install": [
-        ["${python}", "-m", "pip", "install", "-q", "-r", "requirements.txt"]
+        [
+          "${python}",
+          "-m",
+          "pip",
+          "install",
+          "-q",
+          "-r",
+          "requirements.txt"
+        ]
       ],
-      "start": ["${python}", "main.py"],
-      "test": [["${python}", "-m", "pytest"]],
+      "start": [
+        "${python}",
+        "main.py"
+      ],
+      "test": [
+        [
+          "${python}",
+          "-m",
+          "pytest"
+        ]
+      ],
       "env": {
-        "DATABASE_URL": {"dev": "${service:db.url}"},
-        "VALKEY_URL": {"dev": "${service:valkey.url}"},
-        "HOURLY_RATE_CENTS": {"dev": "8900"}
+        "DATABASE_URL": {
+          "dev": "${service:db.url}"
+        },
+        "VALKEY_URL": {
+          "dev": "${service:valkey.url}"
+        },
+        "HOURLY_RATE_CENTS": {
+          "dev": "8900"
+        }
+      }
+    },
+    {
+      "name": "web",
+      "dir": "frontend",
+      "stack": "web-vite",
+      "kind": "static",
+      "install": [
+        [
+          "npm",
+          "ci",
+          "--no-audit",
+          "--no-fund"
+        ]
+      ],
+      "build": [
+        [
+          "npm",
+          "run",
+          "build"
+        ]
+      ],
+      "start": [
+        "npm",
+        "run",
+        "preview",
+        "--",
+        "--port",
+        "${PORT}",
+        "--host"
+      ],
+      "test": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "serve_dir": "dist",
+      "port": 5173,
+      "port_env": "PORT",
+      "health": {
+        "path": "/",
+        "expect_status": [
+          200
+        ]
+      },
+      "env": {
+        "VITE_API_BASE_URL": {
+          "dev": "${service:api.origin}"
+        }
       }
     }
   ]
