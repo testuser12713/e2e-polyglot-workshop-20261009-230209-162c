@@ -1,0 +1,321 @@
+.lookup-form__grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.lookup-form__actions {
+  display: flex;
+}
+
+.lookup-form__actions .btn {
+  width: 100%;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-pill);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.result__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.result__numbers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0);
+}
+
+.result__number {
+  font-family: var(--font-mono);
+  font-size: var(--size-lg);
+  font-weight: 600;
+}
+
+.result__plate {
+  font-family: var(--font-mono);
+  color: var(--color-fgMuted);
+}
+
+.result__meta {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+.result__meta dt {
+  font-size: var(--size-xs);
+  font-weight: 600;
+  color: var(--color-fgMuted);
+}
+
+.result__meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.subsection-title {
+  margin-top: var(--space-4);
+  font-size: var(--size-md);
+  font-weight: 600;
+}
+
+/* StatusBadge ----------------------------------------------------------- */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+
+.status-badge--requested {
+  background: var(--color-statusAngfragtBg);
+  color: var(--color-statusAngfragtFg);
+}
+
+.status-badge--confirmed {
+  background: var(--color-statusBestaetigtBg);
+  color: var(--color-statusBestaetigtFg);
+}
+
+.status-badge--in_progress {
+  background: var(--color-statusInArbeitBg);
+  color: var(--color-statusInArbeitFg);
+}
+
+.status-badge--done {
+  background: var(--color-statusFertigBg);
+  color: var(--color-statusFertigFg);
+}
+
+.status-badge--picked_up {
+  background: var(--color-statusAbgeholtBg);
+  color: var(--color-statusAbgeholtFg);
+}
+
+/* StatusTimeline -------------------------------------------------------- */
+
+.timeline {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__item {
+  position: relative;
+  padding: 0 0 var(--space-3) var(--space-4);
+  border-left: 1px solid var(--color-border);
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+.timeline__time {
+  display: block;
+  margin-top: var(--space-0);
+  color: var(--color-fgMuted);
+  font-size: var(--size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Invoice --------------------------------------------------------------- */
+
+.invoice__number {
+  margin-top: var(--space-1);
+  color: var(--color-fgMuted);
+  font-size: var(--size-sm);
+}
+
+.invoice__issued {
+  margin-top: var(--space-0);
+  color: var(--color-fgMuted);
+  font-size: var(--size-xs);
+}
+
+.invoice__table {
+  width: 100%;
+  margin-top: var(--space-3);
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.invoice__table th {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-fgMuted);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  text-align: left;
+}
+
+.invoice__table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--size-sm);
+}
+
+.invoice__table .num {
+  text-align: right;
+}
+
+.invoice__totals {
+  margin-top: var(--space-3);
+  margin-left: auto;
+  max-width: 320px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.invoice__total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-0) 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.invoice__total-row--gross {
+  font-size: var(--size-lg);
+  font-weight: 600;
+}
+
+/* Skeleton -------------------------------------------------------------- */
+
+.skeleton {
+  height: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surfaceMuted);
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+.invoice__skeleton {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* EmptyState ------------------------------------------------------------ */
+
+.empty-state {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.empty-state__title {
+  font-size: var(--size-md);
+  font-weight: 600;
+}
+
+.empty-state__text {
+  margin-top: var(--space-1);
+  color: var(--color-fgMuted);
+  font-size: var(--size-sm);
+}
+
+@media (min-width: 768px) {
+  .lookup-form__grid {
+    flex-direction: row;
+    gap: var(--space-3);
+  }
+
+  .lookup-form__grid > .field {
+    flex: 1 1 0;
+  }
+
+  .lookup-form__actions .btn {
+    width: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .invoice__table,
+  .invoice__table tbody,
+  .invoice__table tr,
+  .invoice__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .invoice__table thead {
+    display: none;
+  }
+
+  .invoice__table tr {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .invoice__table td {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-0) 0;
+    border-bottom: none;
+  }
+
+  .invoice__table td::before {
+    content: attr(data-label);
+    color: var(--color-fgMuted);
+    font-size: var(--size-xs);
+    font-weight: 600;
+  }
+
+  .invoice__table .num {
+    text-align: right;
+  }
+}
