@@ -39,7 +39,10 @@ CREATE TABLE IF NOT EXISTS vehicles (
 CREATE TABLE IF NOT EXISTS orders (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     order_number text NOT NULL UNIQUE,
-    customer_id  uuid NOT NULL REFERENCES customers(id),
+    -- Nullable: an order always links to its vehicle, and the customer is
+    -- reachable through vehicles.customer_id. The invoice worker creates orders
+    -- with vehicle_id only, so this must not be NOT NULL.
+    customer_id  uuid REFERENCES customers(id),
     vehicle_id   uuid NOT NULL REFERENCES vehicles(id),
     status       text NOT NULL DEFAULT 'requested'
                  CHECK (status IN ('requested', 'confirmed', 'in_progress', 'done', 'picked_up')),
