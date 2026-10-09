@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -121,11 +122,30 @@ func TestContractedRoutesAreRegistered(t *testing.T) {
 			}
 			defer resp.Body.Close()
 
-			if resp.StatusCode == http.StatusNotFound {
-				t.Fatalf("%s %s is not registered (404)", rt.method, rt.path)
+			// A 404 is a legitimate answer of a REGISTERED handler (e.g. the
+			// public lookup for an unknown order number) — only the router's
+			// catch-all proves a path is unregistered, and it is identifiable by
+			// its fixed fallback message. Failing on every 404 would reject a
+			// route the contract requires to answer 404.
+			if resp.StatusCode == http.StatusNotFound && isCatchAll(resp.Body) {
+				t.Fatalf("%s %s is not registered (catch-all 404)", rt.method, rt.path)
 			}
 		})
 	}
+}
+
+// isCatchAll reports whether the body is the router's generic fallback envelope
+// ("Nicht gefunden."), i.e. the answer of an unregistered path.
+func isCatchAll(body io.Reader) bool {
+	var env struct {
+		Error struct {
+			Message string `json:"message"`
+		} `json:"error"`
+	}
+	if err := json.NewDecoder(body).Decode(&env); err != nil {
+		return false
+	}
+	return env.Error.Message == "Nicht gefunden."
 }
 
 // TestCORSReflectsConfiguredOriginWithoutWildcard proves the API only emits CORS
