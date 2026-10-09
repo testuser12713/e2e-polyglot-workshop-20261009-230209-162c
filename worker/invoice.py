@@ -14,6 +14,7 @@ from decimal import ROUND_HALF_UP, Decimal
 
 import psycopg
 from config import Config, load_config
+from outbox import enqueue_customer_notification
 
 logger = logging.getLogger("worker.invoice")
 
@@ -144,5 +145,6 @@ def process_order(order_number: str, config: Config | None = None) -> str:
             vat_cents,
             gross_cents,
         )
+        enqueue_customer_notification(conn, order.order_number)
     logger.info("invoice %s created for order %s", invoice_number, order_number)
     return invoice_number
