@@ -70,9 +70,23 @@ CREATE TABLE IF NOT EXISTS invoices (
 """
 
 
+# The worker owns a dedicated PostgreSQL schema: the product schema the API
+# migration creates in "public" has different tables (orders.customer_id is NOT
+# NULL there), so the suite must never share it. Pinning the search_path keeps
+# every connection - the test's and the worker's - on the worker's own tables.
+WORKER_SCHEMA = "worker_test"
+
+
+def _worker_dsn() -> str:
+    """DATABASE_URL with search_path pinned to the worker's dedicated schema."""
+    base = os.environ["DATABASE_URL"]
+    sep = "&" if "?" in base else "?"
+    return f"{base}{sep}options=-csearch_path%3D{WORKER_SCHEMA}"
+
+
 def _config() -> Config:
     return Config(
-        database_url=os.environ["DATABASE_URL"],
+        database_url=_worker_dsn(),
         valkey_url=os.environ["VALKEY_URL"],
         hourly_rate_cents=HOURLY_RATE_CENTS,
     )
@@ -80,8 +94,9 @@ def _config() -> Config:
 
 @pytest.fixture(scope="module")
 def dsn() -> str:
-    dsn = os.environ["DATABASE_URL"]
+    dsn = _worker_dsn()
     with psycopg.connect(dsn) as conn:
+        conn.execute(f"CREATE SCHEMA IF NOT EXISTS {WORKER_SCHEMA}")
         conn.execute(SCHEMA_SQL)
         conn.commit()
     return dsn
