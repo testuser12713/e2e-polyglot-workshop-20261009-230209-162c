@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS vehicles (
 CREATE TABLE IF NOT EXISTS orders (
     id BIGSERIAL PRIMARY KEY,
     order_number TEXT NOT NULL UNIQUE,
+    customer_id BIGINT NOT NULL REFERENCES customers(id),
     vehicle_id BIGINT NOT NULL REFERENCES vehicles(id),
     desired_date DATE NOT NULL,
     description TEXT NOT NULL,
@@ -117,9 +118,9 @@ def seeded_order(dsn: str):
             (customer_id, plate, "VW", "Golf", 100000),
         ).fetchone()[0]
         order_id = conn.execute(
-            "INSERT INTO orders (order_number, vehicle_id, desired_date, description) "
-            "VALUES (%s, %s, CURRENT_DATE, %s) RETURNING id",
-            (order_number, vehicle_id, "Bremsen quietschen"),
+            "INSERT INTO orders (order_number, customer_id, vehicle_id, desired_date, description) "
+            "VALUES (%s, %s, %s, CURRENT_DATE, %s) RETURNING id",
+            (order_number, customer_id, vehicle_id, "Bremsen quietschen"),
         ).fetchone()[0]
         conn.execute(
             "INSERT INTO order_items (order_id, kind, description, hours) "

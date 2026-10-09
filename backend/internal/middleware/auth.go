@@ -4,8 +4,6 @@ package middleware
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"net/http"
 	"strings"
@@ -15,6 +13,7 @@ import (
 
 	"workshop/internal/deps"
 	"workshop/internal/httpx"
+	"workshop/internal/store"
 )
 
 type contextKey string
@@ -44,8 +43,7 @@ func RequireAuth(next http.Handler) http.Handler {
 			return
 		}
 
-		sum := sha256.Sum256([]byte(token))
-		tokenHash := hex.EncodeToString(sum[:])
+		tokenHash := store.HashToken(token)
 
 		var (
 			employeeID string
