@@ -1,0 +1,31 @@
+{
+  "runcontract": 1,
+  "services": [
+    {
+      "name": "db",
+      "kind": "database",
+      "engine": "postgres"
+    },
+    {
+      "name": "valkey",
+      "kind": "database",
+      "engine": "valkey"
+    },
+    {
+      "name": "worker",
+      "dir": "worker",
+      "stack": "python",
+      "kind": "worker",
+      "install": [
+        ["${python}", "-m", "pip", "install", "-q", "-r", "requirements.txt"]
+      ],
+      "start": ["${python}", "main.py"],
+      "test": [["${python}", "-m", "pytest"]],
+      "env": {
+        "DATABASE_URL": {"dev": "${service:db.url}"},
+        "VALKEY_URL": {"dev": "${service:valkey.url}"},
+        "HOURLY_RATE_CENTS": {"dev": "8900"}
+      }
+    }
+  ]
+}
