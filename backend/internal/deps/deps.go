@@ -5,6 +5,8 @@
 package deps
 
 import (
+	"sync"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"workshop/internal/config"
@@ -18,42 +20,50 @@ type Deps struct {
 	Cfg   *config.Config
 }
 
-var current *Deps
+var (
+	mu      sync.RWMutex
+	current *Deps
+)
 
 // Set installs the process-wide dependencies. It is called once from main
-// before the server starts serving.
+// before the server starts serving, and once per test before the router is
+// built.
 func Set(d *Deps) {
+	mu.Lock()
+	defer mu.Unlock()
 	current = d
 }
 
 // Get returns the installed dependencies, or nil before Set runs.
 func Get() *Deps {
+	mu.RLock()
+	defer mu.RUnlock()
 	return current
 }
 
 // DB returns the shared PostgreSQL pool, or nil when dependencies are not
 // installed yet.
 func DB() *pgxpool.Pool {
-	if current == nil {
-		return nil
+	if d := Get(); d != nil {
+		return d.DB
 	}
-	return current.DB
+	return nil
 }
 
 // Config returns the loaded start configuration, or nil when dependencies are
 // not installed yet.
 func Config() *config.Config {
-	if current == nil {
-		return nil
+	if d := Get(); d != nil {
+		return d.Cfg
 	}
-	return current.Cfg
+	return nil
 }
 
 // QueueClient returns the shared Valkey queue client, or nil when dependencies
 // are not installed yet.
 func QueueClient() *queue.Client {
-	if current == nil {
-		return nil
+	if d := Get(); d != nil {
+		return d.Queue
 	}
-	return current.Queue
+	return nil
 }
