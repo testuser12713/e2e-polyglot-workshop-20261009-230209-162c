@@ -88,13 +88,38 @@ CREATE TABLE IF NOT EXISTS invoice_items (
     unit_price_cents integer NOT NULL
 );
 
+-- The invoice worker owns the outbox and writes one notification per processed
+-- order (order_number, customer_email, invoice_number, message). Older databases
+-- may still carry a divergent outbox from an earlier revision of this file, so
+-- reconcile it: drop the old shape only when it lacks the order_number column,
+-- then create the agreed one. CREATE TABLE IF NOT EXISTS then keeps this
+-- idempotent on every API start.
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_name = 'outbox'
+          AND table_schema = current_schema()
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'outbox'
+          AND table_schema = current_schema()
+          AND column_name = 'order_number'
+    ) THEN
+        DROP TABLE outbox;
+    END IF;
+END
+$$;
+
 CREATE TABLE IF NOT EXISTS outbox (
-    id              bigserial PRIMARY KEY,
-    order_id        uuid NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    recipient_email text NOT NULL,
-    subject         text NOT NULL,
-    body            text NOT NULL,
-    created_at      timestamptz NOT NULL DEFAULT now()
+    id             bigserial PRIMARY KEY,
+    order_number   text NOT NULL UNIQUE,
+    customer_email text NOT NULL,
+    invoice_number text NOT NULL,
+    message        text NOT NULL,
+    created_at     timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders (status);
